@@ -1,5 +1,0 @@
-Hướng dẫn thêm Logo:
-1. Đặt các file logo đối tác của bạn vào thư mục này.
-2. Đổi tên các file thành logo-1.png, logo-2.png, logo-3.png, logo-4.png, logo-5.png, logo-6.png.
-3. Nếu bạn có nhiều hơn hoặc ít hơn 6 logo, bạn có thể sửa trực tiếp trong file index.html (tại phần <section id="partners">).
-Chú ý: Để hiệu ứng chạy liên tục vô tận (infinite scrolling) hoạt động đúng, danh sách logo cần được nhân đôi (copy-paste 2 lần) bên trong thẻ <div class="marquee-content">.
