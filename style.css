@@ -602,8 +602,8 @@ h1, h2, h3, h4, h5, h6 {
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    gap: 2rem;
     min-width: 100%;
+    width: max-content; /* SAFARI FIX: Ép width tuyệt đối để Safari tính đúng 100% trong translateX */
     animation: scroll-x 25s linear infinite;
     -webkit-animation: scroll-x 25s linear infinite;
 }
@@ -617,6 +617,7 @@ h1, h2, h3, h4, h5, h6 {
 .partner-card {
     height: 120px;
     flex: 0 0 240px; /* Cố định chiều rộng để tất cả khung đều có cùng 1 kích thước */
+    margin-right: 2rem; /* Thay thế cho gap để Safari không bị lỗi tính toán khoảng cách */
     background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(240, 240, 240, 0.9));
     border: 1px solid rgba(255, 0, 0, 0.2);
     border-radius: 12px;
@@ -684,12 +685,12 @@ h1, h2, h3, h4, h5, h6 {
 
 @keyframes scroll-x {
     0% { transform: translateX(0); }
-    100% { transform: translateX(calc(-100% - 2rem)); }
+    100% { transform: translateX(-100%); }
 }
 
 @-webkit-keyframes scroll-x {
     0% { -webkit-transform: translateX(0); }
-    100% { -webkit-transform: translateX(calc(-100% - 2rem)); }
+    100% { -webkit-transform: translateX(-100%); }
 }
 
 /* Services Section */
