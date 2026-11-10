@@ -1,0 +1,64 @@
+name: Build and deploy website
+
+on:
+  push:
+    branches: [main, website-v2]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: Unzip source parts in source folder (alphabetical order, later parts overwrite earlier)
+        run: |
+          set -e
+          ls source/*.zip
+          mkdir -p build
+          for z in $(ls source/*.zip | sort); do echo "unzip $z"; unzip -qo "$z" -d build; done
+          ls build
+
+      - name: Install dependencies
+        working-directory: build
+        run: npm ci
+
+      - name: Build website
+        working-directory: build
+        run: npx astro build
+
+      - name: Check build output
+        working-directory: build
+        run: |
+          test -f dist/index.html
+          test -f dist/dich-vu/index.html
+          test -f dist/CNAME
+          cat dist/version.txt
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: build/dist
+
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
